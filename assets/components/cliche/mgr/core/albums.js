@@ -236,7 +236,7 @@ MODx.panel.ClicheAlbumsList = function(config) {
             xtype: 'trigger'
             ,id: 'albums-searchfield'
             ,ctCls: 'customsearchfield'
-            ,emptyText: 'Search...'
+            ,emptyText: _('search_ellipsis')
             ,onTriggerClick: function(){
                 this.reset();    
                 this.fireEvent('click');                

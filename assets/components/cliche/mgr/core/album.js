@@ -106,7 +106,7 @@ Ext.extend(MODx.ClicheAlbumViewPanel,MODx.DataView,{
             if(container.hasClass('loaded')){
                 container.removeClass('loaded');
             }
-            var images = container.select('img');            
+            var images = container.select('img');
             var count = images.getCount();
             images.on('load', function(e){
                 count--;             
@@ -162,7 +162,7 @@ MODx.panel.ClicheAlbumPanel = function(config) {
             xtype: 'trigger'
             ,id: 'album-searchfield-'+config.uid
             ,ctCls: 'customsearchfield'
-            ,emptyText: 'Search...'
+            ,emptyText: _('search_ellipsis')
             ,onTriggerClick: function(){
                 this.reset();    
                 this.fireEvent('click');                
@@ -198,7 +198,7 @@ MODx.panel.ClicheAlbumPanel = function(config) {
                     ,handler: this.onDeleteAlbum
                     ,scope: this                
                 },{
-                    text: 'Save new order'
+                    text: _('cliche.save_new_order')
                     ,id: 'reorder-album-'+config.uid
                     ,handler: this.onReorderAlbum
                     ,scope: this

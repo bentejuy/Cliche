@@ -1,5 +1,9 @@
 Changelog for Cliche
 
+*** Cliche 1.0.1 RC5 ***
+
+    - Added Russian translation
+
 *** Cliche 1.0.1 RC4 ***
 
     - Fix file extension error with fileuploader

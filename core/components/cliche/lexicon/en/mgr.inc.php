@@ -108,3 +108,4 @@ $_lang['cliche.loading'] = '<div class="centered empty-msg">Loading...</div>';
 $_lang['cliche.no_desc'] = '<em>No description</em>';
 $_lang['cliche.no_preview'] = 'No preview';
 $_lang['cliche.saving_msg'] = 'Saving, please Wait...';
+$_lang['cliche.save_new_order'] = 'Save new order';
