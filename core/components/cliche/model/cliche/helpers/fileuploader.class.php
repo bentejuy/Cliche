@@ -211,7 +211,7 @@ class FileUploader extends Import {
                 /* Remove unwanted characters form filename */
                 $name = $this->sanitizeName($this->pathinfo['filename']);
                 $data['name'] = $name;
-                $data['filename'] = str_replace($this->pathinfo['filename'], $name, $data['filename']);
+                $data['filename'] = strtolower(str_replace($this->pathinfo['filename'], $name, $data['filename']));
                 
                 /* Save item */
                 $result = $this->_saveItem($data, $returnThumb);
