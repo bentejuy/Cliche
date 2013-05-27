@@ -1,5 +1,11 @@
 Changelog for Cliche
 
+*** Cliche 1.0.2 RC1 ***
+
+    - Some fixes with uploads and thumbnails
+    - Fix loadCss option
+    - Setting per page count in manager album view
+
 *** Cliche 1.0.1 RC5 ***
 
     - Added Russian translation

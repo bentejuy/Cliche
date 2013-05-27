@@ -15,7 +15,7 @@ MODx.ClicheAlbumViewPanel = function(config) {
         ,baseParams: {
             action: 'album/getList'
             ,ctx: 'mgr'
-            ,limit: 12
+            ,limit: config.pageSize || (parseInt(MODx.config.default_per_page) || 20)
             ,start: 0
         }
         ,tpl: this.templates.thumb
@@ -53,7 +53,7 @@ Ext.extend(MODx.ClicheAlbumViewPanel,MODx.DataView,{
             selNode = selNode[0];
             var data = this.lookup[selNode.id];
             //Show set as cover button if necessary
-            var album = Ext.getCmp('cliche-album-'+this.uid).album;            
+            var album = Ext.getCmp('cliche-album-'+this.uid).album;
             data.is_cover = (data.id == album.cover_id) ? true : false;
             if (data) { Ext.getCmp('cliche-album-item-details-'+this.uid).updateDetail(data); }
         }
@@ -67,19 +67,19 @@ Ext.extend(MODx.ClicheAlbumViewPanel,MODx.DataView,{
     ,_initTemplates: function() {
         this.templates.thumb = new Ext.XTemplate('<tpl for=".">'
             +'<div class="thumb-wrapper" id="cliche-album-item-thumb-{id}">'
-                +'<div class="thumb">'
-                    +'<tpl if="thumbnail">'
-                        +'<img src="{thumbnail}" title="{name}" alt="{name}" />'
-                    +'</tpl>'
-                    +'<tpl if="!thumbnail">'
-                        +'<span class="no-preview error"><span><strong>Error</strong>Image not found</span></span>'
-                    +'</tpl>'
-                    +'<span class="img-loading-mask">&nbsp;</span>'
-                +'</div>'
-                +'<span class="image-name">{name}</span>'
+            +'<div class="thumb">'
+            +'<tpl if="thumbnail">'
+            +'<img src="{thumbnail}" title="{name}" alt="{name}" />'
+            +'</tpl>'
+            +'<tpl if="!thumbnail">'
+            +'<span class="no-preview error"><span><strong>Error</strong>Image not found</span></span>'
+            +'</tpl>'
+            +'<span class="img-loading-mask">&nbsp;</span>'
             +'</div>'
-        +'</tpl>'
-        +'<div class="clear"></div>', {
+            +'<span class="image-name">{name}</span>'
+            +'</div>'
+            +'</tpl>'
+            +'<div class="clear"></div>', {
             compiled: true
             ,checkThumb: function(v){
                 console.log(typeof v);
@@ -87,8 +87,8 @@ Ext.extend(MODx.ClicheAlbumViewPanel,MODx.DataView,{
             }
         });
     }
-    
-    ,onStoreLoad: function( ds, rec, options ){    
+
+    ,onStoreLoad: function( ds, rec, options ){
         var owner = this.ownerCt.ownerCt;
         if(owner.isVisible()){
             this.beautify();
@@ -96,12 +96,12 @@ Ext.extend(MODx.ClicheAlbumViewPanel,MODx.DataView,{
             if(album !== null){
                 this.ownerCt.ownerCt.setRecord(album);
             }
-        }                
+        }
     }
-    
+
     ,beautify: function(){
-        var container = Ext.fly('cliche-album-view-'+this.uid);                    
-        var uid = this.uid;                    
+        var container = Ext.fly('cliche-album-view-'+this.uid);
+        var uid = this.uid;
         if( container !== null ){
             if(container.hasClass('loaded')){
                 container.removeClass('loaded');
@@ -109,15 +109,15 @@ Ext.extend(MODx.ClicheAlbumViewPanel,MODx.DataView,{
             var images = container.select('img');
             var count = images.getCount();
             images.on('load', function(e){
-                count--;             
-                if(count == 0){ 
+                count--;
+                if(count == 0){
                     setTimeout(function(){
                         Ext.fly('cliche-album-view-'+uid).addClass('loaded');
-                    }, 500);                    
+                    }, 500);
                 }
                 /* Hide the loading spinner */
                 var loader = e.getTarget().parentElement.lastChild;
-                Ext.get(loader).fadeOut();                    
+                Ext.get(loader).fadeOut();
             });
             /* Set all thumb wrappers to the height of the collection's tallest item */
             var wrapper = container.query('.thumb-wrapper');
@@ -130,7 +130,7 @@ Ext.extend(MODx.ClicheAlbumViewPanel,MODx.DataView,{
                 var itm = Ext.fly(v);
                 itm.setHeight(currentTallest);
             });
-        }        
+        }
     }
 });
 Ext.reg('cliche-album-view',MODx.ClicheAlbumViewPanel);
@@ -157,15 +157,15 @@ MODx.panel.ClicheAlbumPanel = function(config) {
             ,iconCls:'icon-back'
             ,handler: function(){
                 Ext.getCmp('album-list').activate();
-            }            
+            }
         },'-','-',{
             xtype: 'trigger'
             ,id: 'album-searchfield-'+config.uid
             ,ctCls: 'customsearchfield'
             ,emptyText: _('search_ellipsis')
             ,onTriggerClick: function(){
-                this.reset();    
-                this.fireEvent('click');                
+                this.reset();
+                this.fireEvent('click');
             }
             ,listeners: {
                 specialkey: function(field, e){
@@ -182,7 +182,7 @@ MODx.panel.ClicheAlbumPanel = function(config) {
             }
         },{
             text: _('cliche.btn_options')
-            ,iconCls:'icon-options'            
+            ,iconCls:'icon-options'
             ,menu: {
                 cls: 'custom-menu'
                 ,items: [{
@@ -196,7 +196,7 @@ MODx.panel.ClicheAlbumPanel = function(config) {
                     ,id:'delete-album-'+config.uid
                     ,iconCls:'icon-delete-album'
                     ,handler: this.onDeleteAlbum
-                    ,scope: this                
+                    ,scope: this
                 },{
                     text: _('cliche.save_new_order')
                     ,id: 'reorder-album-'+config.uid
@@ -223,16 +223,31 @@ MODx.panel.ClicheAlbumPanel = function(config) {
     this._initDescTpl();
 };
 Ext.extend(MODx.panel.ClicheAlbumPanel,MODx.Panel,{
-    _init: function(){        
+    _init: function(){
         this.add({
             items: this.view
             ,border: false
-            ,bbar: new Ext.PagingToolbar({
-                pageSize: 12
+            ,bbar: [new Ext.PagingToolbar({
+                pageSize: this.config.pageSize || (parseInt(MODx.config.default_per_page) || 20)
                 ,store: this.view.store
                 ,displayInfo: true
                 ,autoLoad: true
-            })
+                ,items: ['-',_('per_page')+':',{
+                    xtype: 'textfield'
+                    ,value: this.config.pageSize || (parseInt(MODx.config.default_per_page) || 20)
+                    ,width: 40
+                    ,listeners: {
+                        'change': {fn:this.onChangePerPage,scope:this}
+                        ,'render': {fn: function(cmp) {
+                            new Ext.KeyMap(cmp.getEl(), {
+                                key: Ext.EventObject.ENTER
+                                ,fn: this.blur
+                                ,scope: cmp
+                            });
+                        },scope:this}
+                    }
+                }]
+            })]
             ,columnWidth: 1
         },{
             xtype: 'modx-template-panel'
@@ -241,15 +256,26 @@ Ext.extend(MODx.panel.ClicheAlbumPanel,MODx.Panel,{
             ,width: 230
             ,startingText: _('cliche.album_empty_col_msg')
             ,markup: this._descTpl()
-        });            
+        });
     }
-    
+
+    ,onChangePerPage: function(tf,nv) {
+        if (Ext.isEmpty(nv)) return false;
+        nv = parseInt(nv);
+        this.config.pageSize = nv;
+        this.items.get(0).getBottomToolbar().items.get(0).pageSize = nv;
+        this.items.get(0).items.get(0).store.load({params:{
+            start:0
+            ,limit: nv
+        }});
+    }
+
     ,_initDescTpl: function(){
         this.albumDescTpl = new Ext.XTemplate( '<tpl for=".">'+_('cliche.album_desc')+'</tpl>', {
             compiled: true
         });
     }
-    
+
     ,_loadView: function(){
         this.ident = 'cliche-album-ident-'+this.uid;
         this.view = MODx.load({
@@ -262,66 +288,66 @@ Ext.extend(MODx.panel.ClicheAlbumPanel,MODx.Panel,{
             ,border: false
             ,plugins : new MODx.clicheSortableDataView()
         });
-    }    
-    
+    }
+
     ,_descTpl: function(){
         return '<div class="details">'
             +'<tpl for=".">'
-                +'<div class="selected">'
-                    +'<tpl if="thumbnail">'
-                        +'<a href="{image}" title="Album {name} preview" alt="'+_('cliche.album_item_cover_alt_msg')+'" class="lightbox" />'
-                            +'<img src="{image}" alt="{name}" />'
-                        +'</a>'
-                    +'</tpl>'
-                    +'<tpl if="!thumbnail">'
-                        +'<span class="no-preview error"><span><strong>Error</strong>Image not found</span></span>'
-                    +'</tpl>'
-                    +'<h5>{name}</h5>'
-                    +'<ul class="splitbuttons">'
-                        +'<tpl if="thumbnail">'
-                            +'<li class="inline-button edit"><button ext:qtip="'+_('cliche.btn_edit_image')+'" ext:trackMouse=true ext:anchorToTarget=false" onclick="Ext.getCmp(\'cliche-album-default\').editImage(\'{id}\'); return false;">'+_('cliche.btn_edit_image')+'</button></li>'
-                            +'<tpl if="!is_cover">'                                
-                                +'<li class="inline-button set-as-cover"><button ext:qtip="'+_('cliche.btn_set_as_album_cover')+'" ext:trackMouse=true ext:anchorToTarget=false" onclick="Ext.getCmp(\'cliche-album-default\').setAsCover(\'{id}\'); return false;">'+_('cliche.btn_set_as_album_cover')+'</button></li>'
-                            +'</tpl>'
-                        +'</tpl>'
-                        +'<li class="inline-button delete"><button ext:qtip="'+_('cliche.btn_delete_image')+'" ext:trackMouse=true ext:anchorToTarget=false" onclick="Ext.getCmp(\'cliche-album-default\').deleteImage(\'{id}\'); return false;">'+_('cliche.btn_delete_image')+'</button></li>'
-                    +'</ul>'
-                +'</div>'
-                +'<div class="description">'
-                    +'<h4>'+_('cliche.album_item_desc_title')+'</h4>'
-                    +'{description:defaultValue("'+_('cliche.no_desc')+'")}'                        
-                +'</div>'
-                +'<div class="infos">'
-                    +'<h4>'+_('cliche.album_item_informations_title')+'</h4>'
-                    +'<ul>'
-                        +'<li>'
-                            +'<span class="infoname">'+_('cliche.album_item_id')+':</span>'
-                            +'<span class="infovalue">#{id}</span>'
-                        +'</li>'
-                        +'<li>'
-                            +'<span class="infoname">'+_('cliche.album_item_created_by')+':</span>'
-                            +'<span class="infovalue">{createdby}</span>'
-                        +'</li>'
-                        +'<li>'
-                            +'<span class="infoname">'+_('cliche.album_item_created_on')+':</span>'
-                            +'<span class="infovalue">{createdon}</span>'
-                        +'</li>'
-                    +'</ul>'
-                +'</div>'
+            +'<div class="selected">'
+            +'<tpl if="thumbnail">'
+            +'<a href="{image}" title="Album {name} preview" alt="'+_('cliche.album_item_cover_alt_msg')+'" class="lightbox" />'
+            +'<img src="{thumbnail}" alt="{name}" />'
+            +'</a>'
             +'</tpl>'
-        +'</div>';
+            +'<tpl if="!thumbnail">'
+            +'<span class="no-preview error"><span><strong>Error</strong>Image not found</span></span>'
+            +'</tpl>'
+            +'<h5>{name}</h5>'
+            +'<ul class="splitbuttons">'
+            +'<tpl if="thumbnail">'
+            +'<li class="inline-button edit"><button ext:qtip="'+_('cliche.btn_edit_image')+'" ext:trackMouse=true ext:anchorToTarget=false" onclick="Ext.getCmp(\'cliche-album-default\').editImage(\'{id}\'); return false;">'+_('cliche.btn_edit_image')+'</button></li>'
+            +'<tpl if="!is_cover">'
+            +'<li class="inline-button set-as-cover"><button ext:qtip="'+_('cliche.btn_set_as_album_cover')+'" ext:trackMouse=true ext:anchorToTarget=false" onclick="Ext.getCmp(\'cliche-album-default\').setAsCover(\'{id}\'); return false;">'+_('cliche.btn_set_as_album_cover')+'</button></li>'
+            +'</tpl>'
+            +'</tpl>'
+            +'<li class="inline-button delete"><button ext:qtip="'+_('cliche.btn_delete_image')+'" ext:trackMouse=true ext:anchorToTarget=false" onclick="Ext.getCmp(\'cliche-album-default\').deleteImage(\'{id}\'); return false;">'+_('cliche.btn_delete_image')+'</button></li>'
+            +'</ul>'
+            +'</div>'
+            +'<div class="description">'
+            +'<h4>'+_('cliche.album_item_desc_title')+'</h4>'
+            +'{description:defaultValue("'+_('cliche.no_desc')+'")}'
+            +'</div>'
+            +'<div class="infos">'
+            +'<h4>'+_('cliche.album_item_informations_title')+'</h4>'
+            +'<ul>'
+            +'<li>'
+            +'<span class="infoname">'+_('cliche.album_item_id')+':</span>'
+            +'<span class="infovalue">#{id}</span>'
+            +'</li>'
+            +'<li>'
+            +'<span class="infoname">'+_('cliche.album_item_created_by')+':</span>'
+            +'<span class="infovalue">{createdby}</span>'
+            +'</li>'
+            +'<li>'
+            +'<span class="infoname">'+_('cliche.album_item_created_on')+':</span>'
+            +'<span class="infovalue">{createdon}</span>'
+            +'</li>'
+            +'</ul>'
+            +'</div>'
+            +'</tpl>'
+            +'</div>';
     }
-    
-    ,activate: function(rec){        
+
+    ,activate: function(rec){
         if(rec !== undefined){
             this.album = rec;
-        }        
+        }
         this.view.store.setBaseParam('album', this.album.id);
         this.view.run();
         Ext.getCmp('card-container').getLayout().setActiveItem(this.id);
         Ext.getCmp('cliche-album-item-details-'+this.uid).reset();
     }
-    
+
 
     ,updateBreadcrumbs: function(msg, highlight){
         var bd = { text: msg };
@@ -330,27 +356,27 @@ Ext.extend(MODx.panel.ClicheAlbumPanel,MODx.Panel,{
             text : this.album.name
         }];
         Ext.getCmp('cliche-breadcrumbs').updateDetail(bd);
-    }    
-        
+    }
+
     ,setRecord: function(data){
         this.album = data;
         var msg = this.albumDescTpl.apply(this.album);
         this.updateBreadcrumbs(msg);
     }
-    
+
     ,onaddPhoto: function(){
         Ext.getCmp('cliche-uploader-'+this.uid).activate(this.album);
     }
-    
+
     ,onUpdateAlbum: function(btn, e){
-        Ext.getCmp('cliche-main-panel').loadCreateUpdateWindow(_('cliche.window_update_album'), 'update', btn, this.id, this.album);    
+        Ext.getCmp('cliche-main-panel').loadCreateUpdateWindow(_('cliche.window_update_album'), 'update', btn, this.id, this.album);
     }
-    
+
     ,onDeleteAlbum: function(btn, e){
         MODx.msg.confirm({
             title: _('cliche.window_delete_album')
             ,text: _('cliche.window_delete_album_msg')
-            ,url: MODx.ClicheConnectorUrl               
+            ,url: MODx.ClicheConnectorUrl
             ,params: {
                 action: 'album/delete'
                 ,id: this.album.id
@@ -364,18 +390,18 @@ Ext.extend(MODx.panel.ClicheAlbumPanel,MODx.Panel,{
             ,animEl: btn.id
         });
     }
-    
+
     ,editImage: function(){
         var selNode = this.view.getSelectedNodes();
         if(selNode && selNode.length > 0){
             selNode = selNode[0];
             var data = this.view.lookup[selNode.id];
             //Show set as cover button if necessary
-            if (data){ 
-                if(!this.win){            
+            if (data){
+                if(!this.win){
                     this.win = new MODx.window.ClicheImageEditWindow({ uid: this.uid });
                 }
-                this.win.show(this.id);    
+                this.win.show(this.id);
                 var pos = this.win.getPosition(true);
                 this.win.setPosition(pos[0], 35);
                 this.win.reset(this.id);
@@ -383,12 +409,12 @@ Ext.extend(MODx.panel.ClicheAlbumPanel,MODx.Panel,{
             }
         }
     }
-    
+
     ,setAsCover: function(id){
         MODx.msg.confirm({
             title: _('cliche.window_set_as_album_cover')
             ,text: _('cliche.window_set_as_album_cover_msg')
-            ,url: MODx.ClicheConnectorUrl               
+            ,url: MODx.ClicheConnectorUrl
             ,params: {
                 action: 'image/setascover'
                 ,id: id
@@ -403,12 +429,12 @@ Ext.extend(MODx.panel.ClicheAlbumPanel,MODx.Panel,{
             ,animEl: this.id
         });
     }
-    
+
     ,deleteImage: function(id){
         MODx.msg.confirm({
             title: _('cliche.window_delete_image')
             ,text: _('cliche.window_delete_image_msg')
-            ,url: MODx.ClicheConnectorUrl               
+            ,url: MODx.ClicheConnectorUrl
             ,params: {
                 action: 'image/delete'
                 ,id: id
@@ -422,7 +448,7 @@ Ext.extend(MODx.panel.ClicheAlbumPanel,MODx.Panel,{
             ,animEl: this.id
         });
     }
-    
+
     ,onReorderAlbum: function(){
         var ids = this.view.getStore().collect('id');
         var start = this.view.getStore().lastOptions.params.start;
@@ -430,7 +456,7 @@ Ext.extend(MODx.panel.ClicheAlbumPanel,MODx.Panel,{
         MODx.msg.confirm({
             title: 'Reorder album'
             ,text: 'Are sure you want to reorder this album item\'s ?'
-            ,url: MODx.ClicheConnectorUrl               
+            ,url: MODx.ClicheConnectorUrl
             ,params: {
                 action: 'album/reorder'
                 ,ctx: 'mgr'
