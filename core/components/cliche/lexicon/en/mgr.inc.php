@@ -109,3 +109,6 @@ $_lang['cliche.no_desc'] = '<em>No description</em>';
 $_lang['cliche.no_preview'] = 'No preview';
 $_lang['cliche.saving_msg'] = 'Saving, please Wait...';
 $_lang['cliche.save_new_order'] = 'Save new order';
+
+/* AlbumSelect TV */
+$_lang['cliche.album_management'] = 'Manage album';

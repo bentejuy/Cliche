@@ -107,3 +107,6 @@ $_lang['cliche.no_desc'] = '<em>Нет описания</em>';
 $_lang['cliche.no_preview'] = 'Нет обложки';
 $_lang['cliche.saving_msg'] = 'Сохраняется, пожалуйста, подождите...';
 $_lang['cliche.save_new_order'] = 'Сохранить новый порядок';
+
+/* AlbumSelect TV */
+$_lang['cliche.album_management'] = 'Управление альбомом';

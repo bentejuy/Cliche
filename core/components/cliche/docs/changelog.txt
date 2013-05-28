@@ -1,7 +1,7 @@
 Changelog for Cliche
 
-*** Cliche 1.0.2 RC1 ***
-
+*** Cliche 1.1.0 RC1 ***
+    - New custom TV to connect album directly with resources
     - Some fixes with uploads and thumbnails
     - Fix loadCss option
     - Setting per page count in manager album view
