@@ -116,7 +116,17 @@ class FileUploader extends Import {
             }
             $this->file = new UploadFileForm('name');
         } 
-    }        
+    }   
+
+    public function mb_pathinfo ($filename) {
+        preg_match("/^(.*\/)?((.*)\.(.*))$/u", $filename, $matches);
+        $info = array();
+        $info['dirname'] = $matches[1];
+        $info['filename'] = $matches[2];
+        $info['basename'] = $matches[3];
+        $info['extension'] = $matches[4];
+        return $info;
+    }
         
     /**
      * Handle the file upload and registration in database
@@ -170,7 +180,7 @@ class FileUploader extends Import {
             return $this->_response($this->modx->lexicon('cliche.file_too_large_error'));
         }
         
-        $this->pathinfo = pathinfo($this->file->getName());
+        $this->pathinfo = $this->mb_pathinfo($this->file->getName());
         $fileName = $this->pathinfo['filename'];
         $extension = $this->pathinfo['extension'];
         
