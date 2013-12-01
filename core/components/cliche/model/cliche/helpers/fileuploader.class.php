@@ -117,15 +117,17 @@ class FileUploader extends Import {
             $this->file = new UploadFileForm('name');
         } 
     }   
-
-    public function mb_pathinfo ($filename) {
-        preg_match("/^(.*\/)?((.*)\.(.*))$/u", $filename, $matches);
-        $info = array();
-        $info['dirname'] = $matches[1];
-        $info['filename'] = $matches[2];
-        $info['basename'] = $matches[3];
-        $info['extension'] = $matches[4];
-        return $info;
+    
+    public function translitName ($filename) {
+        $translit = $this->modx->getOption('friendly_alias_translit', null, 'none');
+        if ($translit !== 'none') {
+            $translitClass = $this->modx->getOption('friendly_alias_translit_class', null, 'translit.modTransliterate');
+            $translitClassPath = $this->modx->getOption('friendly_alias_translit_class_path', null, $this->modx->getOption('core_path', null, MODX_CORE_PATH) . 'components/');
+            if ($this->modx->getService('translit', $translitClass, $translitClassPath)) {
+                $filename = $this->modx->translit->translate($filename, $translit);
+            }
+        }
+        return $filename;
     }
         
     /**
@@ -180,7 +182,7 @@ class FileUploader extends Import {
             return $this->_response($this->modx->lexicon('cliche.file_too_large_error'));
         }
         
-        $this->pathinfo = $this->mb_pathinfo($this->file->getName());
+        $this->pathinfo = pathinfo($this->translitName($this->file->getName()));
         $fileName = $this->pathinfo['filename'];
         $extension = $this->pathinfo['extension'];
         
