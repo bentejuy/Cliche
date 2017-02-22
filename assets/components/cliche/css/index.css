@@ -49,19 +49,19 @@
 }
 
 /* button icons */
-.icon-back { background:url("../images/back.png") no-repeat scroll 5px 4px transparent !important; }
-.icon-add { background:url("../images/add.png") no-repeat scroll 5px 4px transparent !important; }
-.icon-add-white { background:url("../images/add-white.png") no-repeat scroll 5px 4px transparent !important; }
-.icon-edit { background:url("../images/edit.png") no-repeat scroll 5px 4px transparent !important; }
-.icon-delete { background:url("../images/delete.png") no-repeat scroll 5px 4px transparent !important; }
-.icon-delete-album { background:url("../images/delete-album.png") no-repeat scroll 5px 4px transparent !important; }
-.icon-reorder-album { background:url("../images/save_order.png") no-repeat scroll 5px 4px transparent !important; }
-.edit16-white { background:url("../images/edit16-white.png") no-repeat scroll 5px 4px transparent !important; }
-.eye16 { background:url("../images/view-off.png") no-repeat scroll 5px 4px transparent !important; }
-.icon-image { background:url("../images/image.png") no-repeat scroll 5px 4px transparent !important; }
-.icon-browse { background:url("../images/browse16.png") no-repeat scroll 5px 4px transparent !important; }
-.icon-upload { background:url("../images/up16.png") no-repeat scroll 5px 4px transparent !important; }
-.icon-options { background:url("../images/options.png") no-repeat scroll 5px 4px transparent !important; }
+.icon-back { background:url("../images/back.png") no-repeat scroll 0 0 transparent !important; }
+.icon-add { background:url("../images/add.png") no-repeat scroll 0 0 transparent !important; }
+.icon-add-white { background:url("../images/add-white.png") no-repeat scroll 0 0 transparent !important; }
+.icon-edit { background:url("../images/edit.png") no-repeat scroll 0 0 transparent !important; }
+.icon-delete { background:url("../images/delete.png") no-repeat scroll 0 0 transparent !important; }
+.icon-delete-album { background:url("../images/delete-album.png") no-repeat scroll 0 0 transparent !important; }
+.icon-reorder-album { background:url("../images/save_order.png") no-repeat scroll 0 0 transparent !important; }
+.edit16-white { background:url("../images/edit16-white.png") no-repeat scroll 0 0 transparent !important; }
+.eye16 { background:url("../images/view-off.png") no-repeat scroll 0 0 transparent !important; }
+.icon-image { background:url("../images/image.png") no-repeat scroll 0 0 transparent !important; }
+.icon-browse { background:url("../images/browse16.png") no-repeat scroll 0 0 transparent !important; }
+.icon-upload { background:url("../images/up16.png") no-repeat scroll 0 0 transparent !important; }
+.icon-options { background:url("../images/options.png") no-repeat scroll 0 0 transparent !important; }
 .custom-menu .x-menu-item-icon,
 .ext-strict .custom-menu .x-menu-item-icon { 
     background-position: 0 0 !important; 

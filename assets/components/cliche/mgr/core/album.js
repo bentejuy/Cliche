@@ -200,6 +200,7 @@ MODx.panel.ClicheAlbumPanel = function(config) {
                 },{
                     text: _('cliche.save_new_order')
                     ,id: 'reorder-album-'+config.uid
+                    ,iconCls:'icon-reorder-album'
                     ,handler: this.onReorderAlbum
                     ,scope: this
                 }]
