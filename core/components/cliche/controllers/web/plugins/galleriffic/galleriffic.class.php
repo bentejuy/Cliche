@@ -19,11 +19,19 @@ class Galleriffic extends ClichePlugin {
             $thumb = $obj->loadThumbClass( $original, array(
                 'resizeUp' => true,
                 'jpegQuality' => 90,
-             ));
-            $thumb->adaptiveResize($phs['width'], $phs['height']);
-            $thumb->save($file, 'png');
+            ));
+
+            if(!$thumb){
+                $file = $obj->xpod->cliche->config['mgr_thumb_error'];
+            }
+            else {
+                $thumb->adaptiveResize($phs['width'], $phs['height']);
+                $thumb->save($file, 'png');
+
+                $file = $obj->getCacheDir(false) .$mask;
+            }
         }
-        $phs['thumbnail'] = $obj->getCacheDir(false) . $mask;        
+        $phs['thumbnail'] = $file;
         return $phs;
     }
     

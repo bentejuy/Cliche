@@ -79,6 +79,7 @@ class Cliche {
             'connector_url' => $assetsUrl.'connector.php',
             
             'mgr_thumb_mask' => 'mgr-thumb-75x103.jpg',
+            'mgr_thumb_error' => $assetsUrl.'images/no-thumb.png',
             'phpthumb' => $assetsUrl.'connector.php?action=web/phpthumb&src=',
             'thumb' => $assetsUrl.'connector.php?action=web/thumb',
             

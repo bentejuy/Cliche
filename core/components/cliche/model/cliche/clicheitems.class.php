@@ -13,7 +13,10 @@ class ClicheItems extends xPDOSimpleObject {
                 $cacheFilename = $this->xpdo->cliche->config['mgr_thumb_mask'];
                 $cacheFile = $cacheDir . $cacheFilename;
                 $checkFile = $assetsPath . $cacheFilename;
-                if(!file_exists($checkFile)){ $this->addManagerCacheFiles(); }
+                if(!file_exists($checkFile)){
+                    if(!$this->addManagerCacheFiles())
+                        $cacheFile = $this->xpdo->cliche->config['mgr_thumb_error'];
+                }
                 $value = $cacheFile .'?t='. strtotime('now');
                 break;
             case 'image':
@@ -66,7 +69,15 @@ class ClicheItems extends xPDOSimpleObject {
     }
 
     public function loadThumbClass($original, $options = array()){
-        return $this->xpdo->cliche->loadPhpThumb($original, $options);
+        try {
+            return $this->xpdo->cliche->loadPhpThumb($original, $options);
+        }
+        catch (Exception $e) {
+            if($this->xpdo->context->get('key') == 'mgr')
+                $this->xpdo->log(modX::LOG_LEVEL_ERROR,'[Cliche] phpThumb failed, check the web server error log for more information.');
+
+            return false;
+        }
     }
 
     public function getCacheDir($path = true){
@@ -104,24 +115,26 @@ class ClicheItems extends xPDOSimpleObject {
         }
         $thumb = $this->loadThumbClass($original, $options);
 
-        if(array_key_exists('crop', $params)){
-            $thumb->cropCustom(
-                $params['x'],
-                $params['y'],
-                $params['w'],
-                $params['h'],
-                $params['width'],
-                $params['height']
-            );
-        }
+        if($thumb){
+            if(array_key_exists('crop', $params)){
+                $thumb->cropCustom(
+                    $params['x'],
+                    $params['y'],
+                    $params['w'],
+                    $params['h'],
+                    $params['width'],
+                    $params['height']
+                );
+            }
 
-        if(array_key_exists('zoomcrop', $params)){
-            $thumb->adaptiveResize($params['width'], $params['height']);
+            if(array_key_exists('zoomcrop', $params)){
+                $thumb->adaptiveResize($params['width'], $params['height']);
+            }
+            if(array_key_exists('resized', $params)){
+                $thumb->resize($params['width'], $params['height']);
+            }
+            $thumb->save($cacheFile, $ext);
         }
-        if(array_key_exists('resized', $params)){
-            $thumb->resize($params['width'], $params['height']);
-        }
-        $thumb->save($cacheFile, $ext);
     }
 
     public function save($cacheFlag= null) {
@@ -189,6 +202,9 @@ class ClicheItems extends xPDOSimpleObject {
         $cacheDir = $assetsPath .'/'. $this->get('album_id') .'/'. $this->get('id');
         $cacheDir = $this->createDir($cacheDir);
 
+        if(!$cacheDir)
+            return false;
+
         /* Create the thumbnail */
         $original = $this->xpdo->cliche->config['images_path'] . $this->get('filename');
         $cacheFilename = $this->xpdo->cliche->config['mgr_thumb_mask'];
@@ -196,9 +212,14 @@ class ClicheItems extends xPDOSimpleObject {
 
         /* Load the phpThumb class */
         $options = array('jpegQuality' => 90);
-        $thumb = $this->xpdo->cliche->loadPhpThumb($original, $options);
-        $thumb->adaptiveResize(103, 75);
-        $thumb->save($cacheFile, 'jpg');
+        $thumb = $this->loadThumbClass($original, $options);
+
+        if($thumb) {
+            $thumb->adaptiveResize(103, 75);
+            $thumb->save($cacheFile, 'jpg');
+        }
+
+        return $thumb;
     }
 
     protected function createDir($dir){

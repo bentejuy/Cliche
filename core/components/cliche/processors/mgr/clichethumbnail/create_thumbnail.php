@@ -10,29 +10,32 @@ if(!empty($scriptProperties['id'])){
 
         $fileName = str_replace(' ', '_', $item->get('name'));
         $mask = $fileName .'-'. $scriptProperties['thumbwidth'] .'x'. $scriptProperties['thumbheight'] .'-doc'. $scriptProperties['resource'] .'-tv'. $scriptProperties['tv'] .'.png';
-
         $file = $item->getCacheDir() . $mask;
+
         if(!file_exists($file) || $reload){
             $thumb = $item->loadThumbClass( $modx->cliche->config['images_path'] . $item->get('filename'), array(
                 'resizeUp' => true,
              ));
-            if($crop || $crop == 'true'){
-                 $thumb->cropCustom(
-                    $scriptProperties['x'],
-                    $scriptProperties['y'],
-                    $scriptProperties['w'],
-                    $scriptProperties['h'],
-                    $scriptProperties['thumbwidth'],
-                    $scriptProperties['thumbheight']
-                );
-            } else {
-                 $thumb->adaptiveResize($scriptProperties['thumbwidth'], $scriptProperties['thumbheight']);
+
+            if($thumb){
+                if($crop || $crop == 'true'){
+                     $thumb->cropCustom(
+                        $scriptProperties['x'],
+                        $scriptProperties['y'],
+                        $scriptProperties['w'],
+                        $scriptProperties['h'],
+                        $scriptProperties['thumbwidth'],
+                        $scriptProperties['thumbheight']
+                    );
+                } else {
+                        $thumb->adaptiveResize($scriptProperties['thumbwidth'], $scriptProperties['thumbheight']);
+                }
+                $thumb->save($file, 'png');
             }
-            $thumb->save($file, 'png');
         }
 
         $image['image'] = $item->get('image');
-        $image['thumbnail'] = $item->getCacheDir(false) . $mask;
+        $image['thumbnail'] = $thumb ? $item->getCacheDir(false) .$mask : $this->xpdo->cliche->config['mgr_thumb_error'];
         $image['timestamp'] = strtotime('now');
     }
     $result = array_merge($scriptProperties, $image);
