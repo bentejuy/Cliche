@@ -77,6 +77,8 @@ $_lang['cliche.window_edit_image_msg'] = 'Edit the informations for your image';
 $_lang['cliche.window_set_as_album_cover'] = 'Set as Album cover';
 $_lang['cliche.window_set_as_album_cover_msg'] = 'Do you want to set this image as your album cover ?';
 $_lang['cliche.window_update_album'] = 'Update Current Album';
+$_lang['cliche.window_reorder_album'] = 'Reorder album';
+$_lang['cliche.window_reorder_album_msg'] = 'Are sure you want to reorder this album item\'s ?';
 
 $_lang['cliche.upload_cancel_msg'] = 'Cancel';
 $_lang['cliche.upload_desc'] = '<h4>Select files from your computer</h4><p>You can select several files at a time by holding the shift key.</p>';

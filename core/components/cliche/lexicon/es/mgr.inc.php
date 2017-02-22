@@ -77,6 +77,8 @@ $_lang['cliche.window_edit_image_msg'] = 'Edita las información de tu imagen';
 $_lang['cliche.window_set_as_album_cover'] = 'Establecer como portada';
 $_lang['cliche.window_set_as_album_cover_msg'] = '¿Desea establecer esta imagen como portada del álbum?';
 $_lang['cliche.window_update_album'] = 'Actualizar álbum actual';
+$_lang['cliche.window_reorder_album'] = 'Reordenar Álbum';
+$_lang['cliche.window_reorder_album_msg'] = '¿Está seguro de que desea reordenar este elemento de álbum?';
 
 $_lang['cliche.upload_cancel_msg'] = 'Cancelar';
 $_lang['cliche.upload_desc'] = '<h4>Seleccionar archivos de su ordenador</h4><p>Puede seleccionar varios archivos a la vez manteniendo pulsada la tecla May&uuml;scula.</p>';

@@ -454,8 +454,8 @@ Ext.extend(MODx.panel.ClicheAlbumPanel,MODx.Panel,{
         var start = this.view.getStore().lastOptions.params.start;
         var limit = this.view.getStore().lastOptions.params.limit;
         MODx.msg.confirm({
-            title: 'Reorder album'
-            ,text: 'Are sure you want to reorder this album item\'s ?'
+            title: _('cliche.window_reorder_album')
+            ,text: _('cliche.window_reorder_album_msg')
             ,url: MODx.ClicheConnectorUrl
             ,params: {
                 action: 'album/reorder'

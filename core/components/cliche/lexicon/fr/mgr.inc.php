@@ -81,6 +81,8 @@ $_lang['cliche.upload_in_progress'] = 'Upload en cours…';
 $_lang['cliche.upload_items_for'] = '<h3>Uploader d\'images</h3><p>Uploader de nouvelles images pour cet album <strong>';
 $_lang['cliche.upload_ready_msg'] = 'Fichiers prêts à être uploadés :';
 $_lang['cliche.upload_successful'] = 'Fichiers uploadés avec succès';
+$_lang['cliche.window_reorder_album'] = 'Réorganiser l\'album';
+$_lang['cliche.window_reorder_album_msg'] = 'Voulez-vous vraiment réorganiser cet album?';
 
 /* file uploader messages */
 $_lang['cliche.album_id_error'] = '[Cliche] ID d\'album non indiqué';
