@@ -12,9 +12,9 @@ $_lang['cliche.breadcrumb_album_list_desc'] = '<h3>Lista de Álbumes</h3><p>Sele
 $_lang['cliche.breadcrumb_root'] = 'Lista de álbumes';
 $_lang['cliche.breadcrumb_upload_images'] = 'Subir imágenes';
 
-$_lang['cliche.field_album_name_label'] = 'Nombre del Álbum (obligatorio)';
+$_lang['cliche.field_album_name_label'] = 'Nombre del Álbum (requerido)';
 $_lang['cliche.field_album_desc_label'] = 'Breve descripción';
-$_lang['cliche.field_image_name_label'] = 'Nombre de la Imagen (obligatorio)';
+$_lang['cliche.field_image_name_label'] = 'Nombre de la Imagen (requerido)';
 $_lang['cliche.field_image_desc_label'] = 'Descripción';
 
 $_lang['cliche.album_list_empty_msg'] = '<h4>No hay álbumes creados</h4><p>Cree su primer álbum usando el botón de arriba, luego haga clic en el elemento recién creado para ver su contenido.<br/>Utilice las rutas de navegación para navegar hacia adelante y hacia atrás en el albums (El elemento verde actual no se puede hacer clic)</p>';
